@@ -3,177 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NCB Teletext P100</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    
+    <title>Random British Insult Generator</title>
     <style>
-        /* --- TELETEXT CORE STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Montserrat:wght@400;600&display=swap');
+
         body {
-            background-color: #000000; /* True Black */
-            color: #ffffff;
-            font-family: 'VT323', monospace;
-            font-size: 24px; 
-            line-height: 1.2;
-            margin: 0;
-            padding: 0;
-            /* Teletext characters are always uppercase */
-            text-transform: uppercase; 
-            overflow-x: hidden;
-        }
-
-        /* The TV Screen Container */
-        .tv-screen {
-            max-width: 800px; /* Standard 4:3 aspect ratio feel */
-            min-height: 100vh;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        /* --- THE CEEFAX COLOUR PALETTE --- */
-        .yellow  { color: #FFFF00; }
-        .cyan    { color: #00FFFF; }
-        .green   { color: #00FF00; }
-        .magenta { color: #FF00FF; }
-        .red     { color: #FF0000; }
-        .blue    { color: #0000FF; }
-        .white   { color: #FFFFFF; }
-
-        /* Background Blocks (Used for headers) */
-        .bg-blue   { background-color: #0000FF; color: #FFFFFF; }
-        .bg-white  { background-color: #FFFFFF; color: #000000; }
-        .bg-yellow { background-color: #FFFF00; color: #000000; }
-
-        /* --- LAYOUT UTILITIES --- */
-        .header-row {
+            background-color: #f0f4f8;
+            background-image: radial-gradient(#cfd9df 1px, transparent 1px);
+            background-size: 20px 20px;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 1.2em;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
         }
 
-        .title-graphic {
-            font-size: 1.5em; /* Double height simulation */
-            line-height: 1;
-            margin-bottom: 20px;
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            border-top: 5px solid #00247d; /* Union Jack Blue */
+            border-bottom: 5px solid #cf142b; /* Union Jack Red */
+        }
+
+        h1 {
+            font-family: 'Libre Baskerville', serif;
+            color: #00247d;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        /* The Grid for Headlines */
-        .news-item {
-            display: block;
-            margin-bottom: 15px;
-            text-decoration: none;
+        #result-box {
+            background-color: #f9f9f9;
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .news-item:hover .headline-text {
-            /* Hover effect: simple background swap */
-            background-color: #FFFFFF;
-            color: #000000;
+
+        #result {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #cf142b;
+            line-height: 1.2;
+        }
+
+        button {
+            background-color: #00247d;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
             cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* --- FASTEXT NAVIGATION (Bottom Buttons) --- */
-        .fastext-container {
-            margin-top: 50px;
-            border-top: 2px solid #FFFFFF;
-            padding-top: 10px;
-        }
-        
-        .fastext-links {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 10px;
-            text-align: center;
+        button:hover {
+            background-color: #001a5c;
+            transform: translateY(-2px);
         }
 
-        .ft-btn {
-            padding: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            display: block;
+        button:active {
+            transform: translateY(1px);
         }
-
-        /* The four magic buttons */
-        .btn-red    { background-color: #FF0000; color: #FFFFFF; }
-        .btn-green  { background-color: #00FF00; color: #000000; }
-        .btn-yellow { background-color: #FFFF00; color: #000000; }
-        .btn-cyan   { background-color: #00FFFF; color: #000000; }
 
     </style>
 </head>
 <body>
 
-    <div class="tv-screen">
-
-        <div class="header-row">
-            <span><span class="bg-white">P100</span> <span class="bg-blue">CEEFAX 100</span></span>
-            <span class="yellow" id="clock">12:00:00</span>
+    <div class="container">
+        <h1>The British Insult Generator</h1>
+        <div class="subtitle">Proper British Banter</div>
+        
+        <div id="result-box">
+            <div id="result">Click the button, mate.</div>
         </div>
 
-        <div class="title-graphic">
-            <span class="cyan">NO CONTEXT</span><br>
-            <span class="yellow">BRITS</span> <span class="white">ON TUESDAY</span>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <span class="bg-blue" style="padding-right: 20px;">NEWS FROM THE PUB</span>
-        </div>
-
-        <a href="#" class="news-item">
-            <span class="white">101</span> 
-            <span class="cyan headline-text">MAN HOLDS DOOR OPEN FOR TOO LONG</span>
-        </a>
-
-        <a href="#" class="news-item">
-            <span class="white">102</span> 
-            <span class="green headline-text">WOMAN SAYS "RIGHT THEN" AND LEAVES</span>
-        </a>
-
-        <a href="#" class="news-item">
-            <span class="white">103</span> 
-            <span class="yellow headline-text">UNKNOWN ITEM IN BAGGING AREA</span>
-        </a>
-
-        <a href="#" class="news-item">
-            <span class="white">104</span> 
-            <span class="magenta headline-text">SOMEONE ATE THE LAST HOBNOB</span>
-        </a>
-
-        <a href="#" class="news-item">
-            <span class="white">105</span> 
-            <span class="cyan headline-text">TRAIN REPLACED BY BUS (AGAIN)</span>
-        </a>
-
-        <div style="margin-top: 40px; margin-bottom: 10px;">
-            <span class="red">WEATHER:</span> <span class="green">GREY / DRIZZLE / MISERY</span>
-        </div>
-
-        <div class="fastext-container">
-            <div class="fastext-links">
-                <a href="#" class="ft-btn btn-red">NEWS</a>
-                <a href="#" class="ft-btn btn-green">SPORT</a>
-                <a href="#" class="ft-btn btn-yellow">WEATHER</a>
-                <a href="#" class="ft-btn btn-cyan">TV GUIDE</a>
-            </div>
-        </div>
-
+        <button onclick="generateInsult()">Generate Insult</button>
     </div>
 
     <script>
-        function updateClock() {
-            const now = new Date();
-            // UK formatting for time
-            const timeString = now.toLocaleTimeString('en-GB', { hour12: false });
-            // UK formatting for date
-            const dateString = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-            
-            document.getElementById('clock').innerText = dateString + " " + timeString;
-        }
-        // Run once immediately, then update every second
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
+        // A list of 500 British slang words, random objects, and foods
+        const britishWords = [
+            "spanner", "tool", "barmcake", "muppet", "spoon", "melt", "numpty", "donut", "wazzock", "plonker",
+            "pillock", "git", "berk", "div", "minger", "tossspot", "knobhead", "bellend", "nonce", "chav",
+            "geezer", "gimboid", "gonk", "womble", "walloper", "scrote", "nutter", "noodle", "plank", "daft ha'pennny",
+            "jobsworth", "mug", "slapper", "twit", "nitwit", "trollop", "dodgy geezer", "waste of space", "wet lettuce", "damp towel",
+            "crumpet", "teapot", "biscuit", "hobnob", "custard cream", "wagon wheel", "jammy dodger", "scotch egg", "pork pie", "sausage roll",
+            "black pudding", "haggis", "neep", "tattie", "spud", "chip", "fry-up", "cuppa", "brew", "kettle",
+            "toaster", "fridge", "freezer", "washing machine", "tumble dryer", "dishwasher", "microwave", "oven", "hob", "grill",
+            "spatula", "whisk", "ladle", "colander", "sieve", "peeler", "grater", "chopping board", "rolling pin", "baking tray",
+            "saucepan", "frying pan", "wok", "casserole dish", "mug", "cup", "saucer", "plate", "bowl", "glass",
+            "pint", "half-pint", "flute", "goblet", "tankard", "pitcher", "carafe", "bottle", "can", "tin",
+            "jar", "tub", "packet", "bag", "box", "carton", "crate", "barrel", "keg", "cask",
+            "bin", "dustbin", "wheelie bin", "skip", "dumpster", "rubbish", "trash", "garbage", "litter", "waste",
+            "scrap", "junk", "clutter", "mess", "shambles", "disaster", "catastrophe", "wreck", "ruin", "failure",
+            "flop", "dud", "lemon", "turkey", "goose", "duck", "chicken", "hen", "rooster", "cock",
+            "pigeon", "crow", "raven", "magpie", "sparrow", "robin", "eagle", "hawk", "owl", "bat",
+            "rat", "mouse", "hamster", "gerbil", "guinea pig", "rabbit", "hare", "fox", "wolf", "dog",
+            "cat", "kitten", "puppy", "cub", "calf", "foal", "lamb", "kid", "piglet", "pig",
+            "sow", "boar", "hog", "cow", "bull", "ox", "sheep", "ram", "ewe", "goat",
+            "horse", "mare", "stallion", "pony", "donkey", "mule", "ass", "zebra", "giraffe", "camel",
+            "llama", "alpaca", "kangaroo", "koala", "wombat", "platypus", "echidna", "possum", "badger", "otter",
+            "beaver", "squirrel", "chipmunk", "vole", "shrew", "mole", "hedgehog", "whale", "dolphin", "porpoise",
+            "seal", "walrus", "manatee", "dugong", "shark", "ray", "skate", "fish", "salmon", "trout",
+            "cod", "haddock", "plaice", "sole", "eel", "crab", "lobster", "shrimp", "prawn", "crayfish",
+            "clam", "oyster", "mussel", "scallop", "snail", "slug", "worm", "insect", "bug", "beetle",
+            "ant", "bee", "wasp", "hornet", "fly", "mosquito", "gnat", "moth", "butterfly", "spider",
+            "scorpion", "tick", "mite", "louse", "flea", "centipede", "millipede", "bollard", "roundabout", "zebra crossing",
+            "traffic light", "pelican crossing", "toucan crossing", "puffin crossing", "motorway", "dual carriageway", "A-road", "B-road", "lane",
+            "street", "road", "avenue", "drive", "close", "crescent", "place", "square", "terrace", "gardens",
+            "park", "green", "common", "heath", "moor", "wood", "forest", "copse", "thicket", "grove",
+            "orchard", "meadow", "field", "pasture", "paddock", "farm", "barn", "stable", "sty", "coop",
+            "shed", "garage", "greenhouse", "conservatory", "porch", "patio", "decking", "garden", "lawn", "flowerbed",
+            "border", "hedge", "fence", "wall", "gate", "path", "driveway", "pavement", "kerb", "gutter",
+            "drain", "sewer", "manhole", "pipe", "tube", "cable", "wire", "cord", "rope", "string",
+            "thread", "yarn", "wool", "cotton", "silk", "linen", "nylon", "polyester", "plastic", "rubber",
+            "metal", "iron", "steel", "copper", "brass", "bronze", "silver", "gold", "lead", "tin",
+            "zinc", "aluminium", "glass", "wood", "paper", "card", "cardboard", "brick", "stone", "rock",
+            "pebble", "sand", "dust", "dirt", "mud", "sludge", "slime", "goo", "gunk", "oil",
+            "grease", "wax", "polish", "varnish", "paint", "ink", "dye", "stain", "bleach", "detergent",
+            "soap", "shampoo", "conditioner", "shower gel", "bubble bath", "toothpaste", "mouthwash", "deodorant", "perfume", "aftershave",
+            "lotion", "cream", "ointment", "balm", "gel", "spray", "mousse", "wax", "clay", "putty",
+            "glue", "adhesive", "tape", "blu-tack", "staple", "clip", "pin", "needle", "thimble", "button",
+            "zip", "buckle", "hook", "eye", "stud", "rivet", "screw", "bolt", "nut", "washer",
+            "nail", "hammer", "screwdriver", "wrench", "pliers", "saw", "drill", "chisel", "file", "rasp",
+            "plane", "sander", "grinder", "polisher", "router", "jigsaw", "lathe", "mill", "press", "punch",
+            "shear", "bender", "cutter", "welder", "solder", "braze", "torch", "lamp", "bulb", "switch",
+            "socket", "plug", "fuse", "breaker", "transformer", "generator", "battery", "charger", "adapter", "converter",
+            "inverter", "rectifier", "capacitor", "resistor", "inductor", "diode", "transistor", "chip", "processor", "memory",
+            "disk", "drive", "screen", "monitor", "keyboard", "mouse", "printer", "scanner", "speaker", "microphone",
+            "camera", "lens", "flash", "tripod", "bag", "case", "strap", "filter", "hood", "cap",
+            "remote", "controller", "console", "game", "player", "recorder", "tuner", "amplifier", "receiver", "dish",
+            "aerial", "antenna", "mast", "tower", "pole", "post", "pillar", "column", "beam", "joist",
+            "rafter", "truss", "stud", "batten", "plank", "board", "panel", "sheet", "slab", "block",
+            "brick", "tile", "slate", "shingle", "thatch", "turf", "sod", "soil", "earth", "ground",
+            "floor", "ceiling", "roof", "wall", "window", "door", "stairs", "steps", "ladder", "lift",
+            "elevator", "escalator", "ramp", "bridge", "tunnel", "viaduct", "aqueduct", "dam", "weir", "lock",
+            "canal", "river", "stream", "brook", "beck", "burn", "creek", "tributary", "estuary", "delta",
+            "lake", "loch", "lough", "mere", "tarn", "reservoir", "pond", "pool", "puddle", "well",
+            "spring", "fountain", "geyser", "waterfall", "cascade", "rapid", "wave", "tide", "current", "flow"
+        ];
 
+        function generateInsult() {
+            // Pick a random index
+            const randomIndex = Math.floor(Math.random() * britishWords.length);
+            const randomWord = britishWords[randomIndex];
+            
+            // Construct the insult
+            const insult = `You absolute ${randomWord}!`;
+            
+            // Display it
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerText = insult;
+            
+            // Add a little shake animation effect
+            const box = document.getElementById('result-box');
+            box.style.animation = 'none';
+            box.offsetHeight; /* trigger reflow */
+            box.style.animation = 'shake 0.5s';
+        }
+    </script>
+    
+    <style>
+        /* Adding the shake animation keyframes here to keep it contained */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+    </style>
 </body>
 </html>
