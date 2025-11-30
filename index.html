@@ -3,270 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Royal Roast - British Insult Generator</title>
+    <title>The Royal British Insult Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap');
-
-        :root {
-            --neon-blue: #00f2ff;
-            --neon-red: #ff0055;
-            --deep-bg: #050510;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-
         body {
-            background-color: var(--deep-bg);
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(0, 242, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(255, 0, 85, 0.1) 0%, transparent 40%);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+            background-color: #0f172a;
+            background-image: radial-gradient(#1e293b 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-
-        .container {
-            text-align: center;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            padding: 3rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5), 
-                        inset 0 0 0 1px rgba(255,255,255,0.1);
-            max-width: 600px;
-            width: 90%;
-            position: relative;
+        .royal-font {
+            font-family: 'Abril Fatface', cursive;
         }
-
-        h1 {
-            font-family: 'Anton', sans-serif;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 0;
-            text-shadow: 2px 2px 0px var(--neon-red), -2px -2px 0px var(--neon-blue);
+        .newspaper-font {
+            font-family: 'Playfair Display', serif;
         }
-
-        .flag-accent {
-            height: 4px;
-            width: 100px;
-            background: linear-gradient(90deg, var(--neon-blue), #ffffff, var(--neon-red));
-            margin: 0 auto 2rem auto;
-            border-radius: 2px;
+        .union-jack-gradient {
+            background: linear-gradient(135deg, #00247d 25%, #cf142b 25%, #cf142b 30%, #ffffff 30%, #ffffff 35%, #00247d 35%, #00247d 65%, #ffffff 65%, #ffffff 70%, #cf142b 70%, #cf142b 75%, #00247d 75%);
+            background-size: 200% 200%;
+            animation: flagWave 10s ease infinite;
         }
-
-        #insult-display {
-            font-size: 2rem;
-            font-weight: 700;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            line-height: 1.2;
-            color: #fff;
+        @keyframes flagWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-
-        .word {
-            display: inline-block;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
         }
-
-        .highlight {
-            color: var(--neon-blue);
-        }
-
-        button {
-            background: transparent;
-            color: white;
-            font-family: 'Anton', sans-serif;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 1rem 3rem;
-            border: 2px solid white;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        button:hover {
-            border-color: var(--neon-red);
-            color: var(--neon-red);
-            box-shadow: 0 0 15px var(--neon-red);
-            transform: translateY(-2px);
-        }
-
-        button:hover::before {
-            left: 100%;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .icon-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: background 0.2s;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-        }
-
-        /* Animation Classes */
-        .pop-in {
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            opacity: 0;
-            transform: scale(0.5);
-        }
-
-        @keyframes popIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            #insult-display { font-size: 1.5rem; }
+        .btn-press:active {
+            transform: translateY(2px);
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 text-slate-100">
 
-    <div class="container">
-        <h1>The Royal Roast</h1>
-        <div class="flag-accent"></div>
+    <!-- Main Container -->
+    <div class="max-w-2xl w-full bg-[#f8fafc] text-slate-800 rounded-xl overflow-hidden card-shadow relative border-8 border-double border-slate-300">
         
-        <div id="insult-display">
-            Click the button, you muppet.
+        <!-- Decorative Top Bar -->
+        <div class="h-3 w-full bg-[#00247d] flex">
+            <div class="h-full w-1/3 bg-[#00247d]"></div>
+            <div class="h-full w-1/3 bg-[#ffffff]"></div>
+            <div class="h-full w-1/3 bg-[#cf142b]"></div>
         </div>
 
-        <button onclick="generateInsult()">Hurl Abuse</button>
+        <!-- Header / Logo Area -->
+        <div class="bg-slate-100 p-8 text-center border-b border-slate-200">
+            <!-- Logo SVG -->
+            <div class="w-24 h-24 mx-auto mb-4 relative drop-shadow-lg">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bowler Hat -->
+                    <path d="M20 65 H80 C85 65 90 68 90 72 C90 76 85 79 80 79 H20 C15 79 10 76 10 72 C10 68 15 65 20 65 Z" fill="#1e293b"/>
+                    <path d="M25 65 C25 40 30 25 50 25 C70 25 75 40 75 65 H25 Z" fill="#0f172a"/>
+                    <path d="M25 60 H75" stroke="#334155" stroke-width="4"/>
+                    <!-- Monocle -->
+                    <circle cx="65" cy="50" r="10" stroke="#fbbf24" stroke-width="3" fill="rgba(255,255,255,0.3)"/>
+                    <path d="M65 60 Q65 80 55 85" stroke="#fbbf24" stroke-width="1.5" fill="none"/>
+                    <!-- Moustache -->
+                    <path d="M35 85 Q50 80 65 85 Q50 95 35 85 Z" fill="#475569"/>
+                    <path d="M65 85 Q50 80 35 85 Q50 95 65 85 Z" fill="#475569" transform="scale(-1, 1) translate(-100, 0)"/>
+                </svg>
+            </div>
+            
+            <h1 class="royal-font text-4xl md:text-5xl text-[#00247d] mb-2 tracking-tight">The Gentleman's<br/>Grievance</h1>
+            <p class="newspaper-font italic text-slate-500 text-lg">"Providing proper British verbal lashings since 1852"</p>
+        </div>
 
-        <div class="controls">
-            <button class="icon-btn" onclick="copyToClipboard()" title="Copy to Clipboard">📋</button>
-            <button class="icon-btn" onclick="speakInsult()" title="Read Aloud (British Accent)">📢</button>
+        <!-- Insult Display Area -->
+        <div class="p-8 md:p-12 text-center bg-[#f1f5f9] relative min-h-[250px] flex flex-col items-center justify-center">
+            
+            <!-- Crown Icon Background Watermark -->
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
+                <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5M19 19C19 19.6 18.6 20 18 20H6C5.4 20 5 19.6 5 19V18H19V19Z"/>
+                </svg>
+            </div>
+
+            <div id="insult-container" class="relative z-10">
+                <p class="uppercase text-xs font-bold tracking-[0.3em] text-slate-400 mb-4">Your Designation</p>
+                <h2 id="insult-text" class="newspaper-font text-3xl md:text-5xl font-bold text-[#cf142b] leading-tight transition-all duration-300 ease-out transform">
+                    Click below, you<br/>utter melt.
+                </h2>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="bg-white p-6 border-t border-slate-200">
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                
+                <button onclick="generateInsult()" class="btn-press w-full md:w-auto bg-[#00247d] hover:bg-[#001a5c] text-white px-8 py-4 rounded-lg font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Do Your Worst
+                </button>
+
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="speakInsult()" class="btn-press flex-1 md:flex-none bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-4 rounded-lg font-bold shadow border border-slate-300 transition-colors flex items-center justify-center gap-2" title="Read Aloud">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                    </button>
+                    
+                    <button onclick="copyInsult()" class="btn-press flex-1 md:flex-none bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-4 rounded-lg font-bold shadow border border-slate-300 transition-colors flex items-center justify-center gap-2" title="Copy to Clipboard">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                    </button>
+                </div>
+            </div>
+            <p id="toast" class="text-center text-[#00247d] font-bold text-sm mt-4 opacity-0 transition-opacity duration-300 h-5">Copied to clipboard!</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-[#0f172a] text-slate-400 p-4 text-center text-xs">
+            <p>&copy; 2024 The Ministry of Silly Insults. No offense intended, you wazzock.</p>
         </div>
     </div>
 
     <script>
-        // Column A: The Intensifier
-        const colA = [
-            "Absolute", "Utter", "Blithering", "Complete", "Total", 
-            "Raving", "Proper", "Thundering", "Colossal", "Gibbering", 
-            "Inufferable", "Gargantuan", "Unadulterated", "Flagrant", "Stonking"
+        // Extensive vocabulary lists designed to create thousands of "proper" combinations
+        const part1 = [
+            "You absolute", "You bloody", "You complete", "You total", "You utter", "You right", "You proper",
+            "You thundering", "You blithering", "You raving", "You colossal", "You monumental", "You staggering",
+            "You unmitigated", "You distinct", "You genuine", "You prize", "You grade-A", "You shambling", 
+            "You festering", "You poxy", "You dribbling", "You mouth-breathing", "You slack-jawed", "You gormless",
+            "You dismal", "You rancid", "You dodgy", "You wonky", "You crusty", "You clapped-out", "You sodding",
+            "You flipping", "You chuffing", "You blinking", "You flaming", "You blooming", "You bumbling",
+            "You inept", "You daft", "You hopeless", "You miserable", "You tragic", "You confounded", "You wretched",
+            "You intolerable", "You insufferable", "You gormy", "You minging", "You rank", "You grotty"
         ];
 
-        // Column B: The Descriptive Adjective
-        const colB = [
-            "cock-wombling", "slack-jawed", "dim-witted", "manky", "gormless", 
-            "festering", "knuckle-dragging", "mouth-breathing", "spunk-trumpeting", "wobbly", 
-            "tea-guzzling", "pigeon-chested", "scruffy", "onion-breathed", "custard-filled",
-            "dodgy", "clapped-out", "wonky", "pie-eating", "window-licking"
+        const part2 = [
+            "gormless", "daft", "dozy", "pillocking", "wazzocking", "glaikit", "numpty", "muppety", "spoons",
+            "faffing", "plonking", "bell-whiffing", "knob-jockeying", "tossing", "minging", "manky", "poxy",
+            "scruffy", "clapped-out", "knobbly", "cheesy", "greasy", "onion-eyed", "cock-eyed", "boss-eyed",
+            "jam-roll", "custard-faced", "sausage-fingered", "toffee-nosed", "snooty", "stuck-up", "lardy",
+            "pasty", "wheezing", "whinging", "moaning", "giping", "gawping", "fumbling", "bungling", "witless",
+            "brainless", "clueless", "spineless", "gutless", "vacuous", "vapid", "inane", "obtuse", "dense",
+            "thick", "wooden", "hollow", "rotten", "mouldy", "dusty", "rusty", "crusty", "saggy", "floppy",
+            "damp", "moist", "clammy", "sticky", "smelly", "reeking", "honking", "humming"
         ];
 
-        // Column C: The British Noun
-        const colC = [
-            "wazzock", "pillock", "bellend", "muppet", "numpty", 
-            "plonker", "tosser", "git", "knobhead", "wanker", 
-            "cockwomble", "twat", "nonce", "minger", "sod", 
-            "donut", "weapon", "melt", "chopper", "clown"
+        const part3 = [
+            "muppet", "wazzock", "numpty", "pillock", "plonker", "donut", "spoon", "melt", "bellend", "tosser",
+            "wanker", "knobhead", "git", "sod", "chav", "slapper", "twat", "arsehole", "arse-badger", "cockwomble",
+            "womble", "weapon", "tool", "spanner", "div", "divvy", "nutter", "loop-the-loop", "fruitcake",
+            "headcase", "basket-case", "chopper", "whopper", "walloper", "roaster", "rocket", "bampot", "tube",
+            "balloon", "lemon", "melon", "turnip", "cabbage", "potato", "ham-sandwich", "fanny-baws", "bawbag",
+            "jobby", "shite-hawk", "gobshite", "scutter", "minger", "trollop", "slattern", "gimp", "goon",
+            "clown", "joker", "buffoon", "poltroon", "lout", "yob", "oaf", "lummox", "duffer", "bodger",
+            "faffer", "ditherer", "waster", "layabout", "skiver", "dodger", "chancer", "blagger", "scrounger",
+            "moocher", "piker", "toad", "weasel", "rat", "snake", "worm", "maggot", "slug", "leech",
+            "parasite", "cretin", "imbecile", "moron", "idiot", "simpleton", "dunce", "fool", "nincompoop",
+            "nitwit", "half-wit", "dimwit", "dipstick", "doormat", "wet-wipe", "drip", "sap", "dweeb", "nerd",
+            "anorak", "spotter", "train-spotter", "bus-wanker", "coffin-dodger", "window-licker", "oxygen-thief"
         ];
 
-        // Total Combinations: 15 * 20 * 20 = 6,000 unique insults.
+        // Ensure we don't repeat the exact same insult twice in a row
+        let lastInsult = "";
 
-        function getRandom(arr) {
+        function getRandomElement(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
         }
 
         function generateInsult() {
-            const display = document.getElementById('insult-display');
+            const p1 = getRandomElement(part1);
+            const p2 = getRandomElement(part2);
+            const p3 = getRandomElement(part3);
             
-            // Generate parts
-            const part1 = getRandom(colA);
-            const part2 = getRandom(colB);
-            const part3 = getRandom(colC);
+            // Format: "You [Adjective] [Adjective] [Noun]"
+            // Sometimes we might skip the second adjective for brevity/punchiness
+            const useSecondAdjective = Math.random() > 0.2; // 80% chance of 3 parts
+            
+            let insult = "";
+            if (useSecondAdjective) {
+                insult = `${p1} ${p2} ${p3}.`;
+            } else {
+                insult = `${p1} ${p3}.`;
+            }
 
-            // Construct HTML with animation classes
-            // We use spans to animate words sequentially
-            const html = `
-                <span class="word pop-in" style="animation-delay: 0ms">You</span>
-                <span class="word pop-in highlight" style="animation-delay: 100ms">${part1}</span>
-                <span class="word pop-in" style="animation-delay: 200ms">${part2}</span>
-                <span class="word pop-in highlight" style="animation-delay: 300ms">${part3}!</span>
-            `;
+            if (insult === lastInsult) {
+                return generateInsult();
+            }
 
-            display.innerHTML = html;
+            lastInsult = insult;
+
+            // Animation effect
+            const textEl = document.getElementById('insult-text');
+            textEl.style.opacity = '0';
+            textEl.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                textEl.innerHTML = insult.replace(/\n/g, '<br/>');
+                textEl.style.opacity = '1';
+                textEl.style.transform = 'translateY(0)';
+            }, 200);
+
+            // Add class for "punch" effect
+            textEl.classList.remove('scale-105');
+            void textEl.offsetWidth; // trigger reflow
+            textEl.classList.add('scale-105');
+            setTimeout(() => textEl.classList.remove('scale-105'), 200);
         }
 
-        function copyToClipboard() {
-            const text = document.getElementById('insult-display').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Insult copied to clipboard, you lazy sod!");
-            });
+        function copyInsult() {
+            const text = document.getElementById('insult-text').innerText;
+            
+            // Use fallback for older browsers or if navigator.clipboard fails
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(showToast);
+            } else {
+                // Fallback method
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
         }
 
         function speakInsult() {
-            const text = document.getElementById('insult-display').innerText;
+            const text = document.getElementById('insult-text').innerText;
+            
+            // Cancel any current speech
+            window.speechSynthesis.cancel();
+
             const utterance = new SpeechSynthesisUtterance(text);
             
             // Try to find a British voice
             const voices = window.speechSynthesis.getVoices();
-            const britishVoice = voices.find(voice => voice.lang.includes('en-GB'));
+            const britishVoice = voices.find(voice => 
+                voice.lang.includes('en-GB') || voice.name.includes('UK') || voice.name.includes('British')
+            );
             
             if (britishVoice) {
                 utterance.voice = britishVoice;
             }
             
-            utterance.rate = 0.9; // Slightly slower for emphasis
             utterance.pitch = 0.9; // Slightly deeper
-            
+            utterance.rate = 0.9;  // Slightly slower for emphasis
+
             window.speechSynthesis.speak(utterance);
         }
 
-        // Initialize voices (browser quirk)
-        window.speechSynthesis.onvoiceschanged = () => {
-            // This forces the browser to load the voice list
-        };
+        // Initialize voices (often needed for Chrome)
+        window.speechSynthesis.onvoiceschanged = () => {};
 
     </script>
 </body>
