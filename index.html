@@ -3,204 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random British Insult Generator</title>
+    <title>The Royal Roast - British Insult Generator</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Montserrat:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap');
+
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-red: #ff0055;
+            --deep-bg: #050510;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
 
         body {
-            background-color: #f0f4f8;
-            background-image: radial-gradient(#cfd9df 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-color: var(--deep-bg);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(0, 242, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 85, 0.1) 0%, transparent 40%);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            color: #333;
+            overflow: hidden;
         }
 
         .container {
-            background: white;
+            text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
             padding: 3rem;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), 
+                        inset 0 0 0 1px rgba(255,255,255,0.1);
             max-width: 600px;
             width: 90%;
-            border-top: 5px solid #00247d; /* Union Jack Blue */
-            border-bottom: 5px solid #cf142b; /* Union Jack Red */
+            position: relative;
         }
 
         h1 {
-            font-family: 'Libre Baskerville', serif;
-            color: #00247d;
-            margin-bottom: 0.5rem;
-            font-size: 2rem;
-        }
-
-        .subtitle {
-            color: #666;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            margin-top: 0;
+            text-shadow: 2px 2px 0px var(--neon-red), -2px -2px 0px var(--neon-blue);
         }
 
-        #result-box {
-            background-color: #f9f9f9;
-            border: 2px dashed #ccc;
-            padding: 2rem;
+        .flag-accent {
+            height: 4px;
+            width: 100px;
+            background: linear-gradient(90deg, var(--neon-blue), #ffffff, var(--neon-red));
+            margin: 0 auto 2rem auto;
+            border-radius: 2px;
+        }
+
+        #insult-display {
+            font-size: 2rem;
+            font-weight: 700;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 2rem;
-            border-radius: 10px;
-            min-height: 80px;
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        .word {
+            display: inline-block;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .highlight {
+            color: var(--neon-blue);
+        }
+
+        button {
+            background: transparent;
+            color: white;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 1rem 3rem;
+            border: 2px solid white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            box-shadow: 0 0 15px var(--neon-red);
+            transform: translateY(-2px);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .icon-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.2s;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        #result {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #cf142b;
-            line-height: 1.2;
+        .icon-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
         }
 
-        button {
-            background-color: #00247d;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.1s ease, background-color 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        /* Animation Classes */
+        .pop-in {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.5);
         }
 
-        button:hover {
-            background-color: #001a5c;
-            transform: translateY(-2px);
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        button:active {
-            transform: translateY(1px);
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            #insult-display { font-size: 1.5rem; }
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>The British Insult Generator</h1>
-        <div class="subtitle">Proper British Banter</div>
+        <h1>The Royal Roast</h1>
+        <div class="flag-accent"></div>
         
-        <div id="result-box">
-            <div id="result">Click the button, mate.</div>
+        <div id="insult-display">
+            Click the button, you muppet.
         </div>
 
-        <button onclick="generateInsult()">Generate Insult</button>
+        <button onclick="generateInsult()">Hurl Abuse</button>
+
+        <div class="controls">
+            <button class="icon-btn" onclick="copyToClipboard()" title="Copy to Clipboard">📋</button>
+            <button class="icon-btn" onclick="speakInsult()" title="Read Aloud (British Accent)">📢</button>
+        </div>
     </div>
 
     <script>
-        // A list of 500 British slang words, random objects, and foods
-        const britishWords = [
-            "spanner", "tool", "barmcake", "muppet", "spoon", "melt", "numpty", "donut", "wazzock", "plonker",
-            "pillock", "git", "berk", "div", "minger", "tossspot", "knobhead", "bellend", "nonce", "chav",
-            "geezer", "gimboid", "gonk", "womble", "walloper", "scrote", "nutter", "noodle", "plank", "daft ha'pennny",
-            "jobsworth", "mug", "slapper", "twit", "nitwit", "trollop", "dodgy geezer", "waste of space", "wet lettuce", "damp towel",
-            "crumpet", "teapot", "biscuit", "hobnob", "custard cream", "wagon wheel", "jammy dodger", "scotch egg", "pork pie", "sausage roll",
-            "black pudding", "haggis", "neep", "tattie", "spud", "chip", "fry-up", "cuppa", "brew", "kettle",
-            "toaster", "fridge", "freezer", "washing machine", "tumble dryer", "dishwasher", "microwave", "oven", "hob", "grill",
-            "spatula", "whisk", "ladle", "colander", "sieve", "peeler", "grater", "chopping board", "rolling pin", "baking tray",
-            "saucepan", "frying pan", "wok", "casserole dish", "mug", "cup", "saucer", "plate", "bowl", "glass",
-            "pint", "half-pint", "flute", "goblet", "tankard", "pitcher", "carafe", "bottle", "can", "tin",
-            "jar", "tub", "packet", "bag", "box", "carton", "crate", "barrel", "keg", "cask",
-            "bin", "dustbin", "wheelie bin", "skip", "dumpster", "rubbish", "trash", "garbage", "litter", "waste",
-            "scrap", "junk", "clutter", "mess", "shambles", "disaster", "catastrophe", "wreck", "ruin", "failure",
-            "flop", "dud", "lemon", "turkey", "goose", "duck", "chicken", "hen", "rooster", "cock",
-            "pigeon", "crow", "raven", "magpie", "sparrow", "robin", "eagle", "hawk", "owl", "bat",
-            "rat", "mouse", "hamster", "gerbil", "guinea pig", "rabbit", "hare", "fox", "wolf", "dog",
-            "cat", "kitten", "puppy", "cub", "calf", "foal", "lamb", "kid", "piglet", "pig",
-            "sow", "boar", "hog", "cow", "bull", "ox", "sheep", "ram", "ewe", "goat",
-            "horse", "mare", "stallion", "pony", "donkey", "mule", "ass", "zebra", "giraffe", "camel",
-            "llama", "alpaca", "kangaroo", "koala", "wombat", "platypus", "echidna", "possum", "badger", "otter",
-            "beaver", "squirrel", "chipmunk", "vole", "shrew", "mole", "hedgehog", "whale", "dolphin", "porpoise",
-            "seal", "walrus", "manatee", "dugong", "shark", "ray", "skate", "fish", "salmon", "trout",
-            "cod", "haddock", "plaice", "sole", "eel", "crab", "lobster", "shrimp", "prawn", "crayfish",
-            "clam", "oyster", "mussel", "scallop", "snail", "slug", "worm", "insect", "bug", "beetle",
-            "ant", "bee", "wasp", "hornet", "fly", "mosquito", "gnat", "moth", "butterfly", "spider",
-            "scorpion", "tick", "mite", "louse", "flea", "centipede", "millipede", "bollard", "roundabout", "zebra crossing",
-            "traffic light", "pelican crossing", "toucan crossing", "puffin crossing", "motorway", "dual carriageway", "A-road", "B-road", "lane",
-            "street", "road", "avenue", "drive", "close", "crescent", "place", "square", "terrace", "gardens",
-            "park", "green", "common", "heath", "moor", "wood", "forest", "copse", "thicket", "grove",
-            "orchard", "meadow", "field", "pasture", "paddock", "farm", "barn", "stable", "sty", "coop",
-            "shed", "garage", "greenhouse", "conservatory", "porch", "patio", "decking", "garden", "lawn", "flowerbed",
-            "border", "hedge", "fence", "wall", "gate", "path", "driveway", "pavement", "kerb", "gutter",
-            "drain", "sewer", "manhole", "pipe", "tube", "cable", "wire", "cord", "rope", "string",
-            "thread", "yarn", "wool", "cotton", "silk", "linen", "nylon", "polyester", "plastic", "rubber",
-            "metal", "iron", "steel", "copper", "brass", "bronze", "silver", "gold", "lead", "tin",
-            "zinc", "aluminium", "glass", "wood", "paper", "card", "cardboard", "brick", "stone", "rock",
-            "pebble", "sand", "dust", "dirt", "mud", "sludge", "slime", "goo", "gunk", "oil",
-            "grease", "wax", "polish", "varnish", "paint", "ink", "dye", "stain", "bleach", "detergent",
-            "soap", "shampoo", "conditioner", "shower gel", "bubble bath", "toothpaste", "mouthwash", "deodorant", "perfume", "aftershave",
-            "lotion", "cream", "ointment", "balm", "gel", "spray", "mousse", "wax", "clay", "putty",
-            "glue", "adhesive", "tape", "blu-tack", "staple", "clip", "pin", "needle", "thimble", "button",
-            "zip", "buckle", "hook", "eye", "stud", "rivet", "screw", "bolt", "nut", "washer",
-            "nail", "hammer", "screwdriver", "wrench", "pliers", "saw", "drill", "chisel", "file", "rasp",
-            "plane", "sander", "grinder", "polisher", "router", "jigsaw", "lathe", "mill", "press", "punch",
-            "shear", "bender", "cutter", "welder", "solder", "braze", "torch", "lamp", "bulb", "switch",
-            "socket", "plug", "fuse", "breaker", "transformer", "generator", "battery", "charger", "adapter", "converter",
-            "inverter", "rectifier", "capacitor", "resistor", "inductor", "diode", "transistor", "chip", "processor", "memory",
-            "disk", "drive", "screen", "monitor", "keyboard", "mouse", "printer", "scanner", "speaker", "microphone",
-            "camera", "lens", "flash", "tripod", "bag", "case", "strap", "filter", "hood", "cap",
-            "remote", "controller", "console", "game", "player", "recorder", "tuner", "amplifier", "receiver", "dish",
-            "aerial", "antenna", "mast", "tower", "pole", "post", "pillar", "column", "beam", "joist",
-            "rafter", "truss", "stud", "batten", "plank", "board", "panel", "sheet", "slab", "block",
-            "brick", "tile", "slate", "shingle", "thatch", "turf", "sod", "soil", "earth", "ground",
-            "floor", "ceiling", "roof", "wall", "window", "door", "stairs", "steps", "ladder", "lift",
-            "elevator", "escalator", "ramp", "bridge", "tunnel", "viaduct", "aqueduct", "dam", "weir", "lock",
-            "canal", "river", "stream", "brook", "beck", "burn", "creek", "tributary", "estuary", "delta",
-            "lake", "loch", "lough", "mere", "tarn", "reservoir", "pond", "pool", "puddle", "well",
-            "spring", "fountain", "geyser", "waterfall", "cascade", "rapid", "wave", "tide", "current", "flow"
+        // Column A: The Intensifier
+        const colA = [
+            "Absolute", "Utter", "Blithering", "Complete", "Total", 
+            "Raving", "Proper", "Thundering", "Colossal", "Gibbering", 
+            "Inufferable", "Gargantuan", "Unadulterated", "Flagrant", "Stonking"
         ];
 
+        // Column B: The Descriptive Adjective
+        const colB = [
+            "cock-wombling", "slack-jawed", "dim-witted", "manky", "gormless", 
+            "festering", "knuckle-dragging", "mouth-breathing", "spunk-trumpeting", "wobbly", 
+            "tea-guzzling", "pigeon-chested", "scruffy", "onion-breathed", "custard-filled",
+            "dodgy", "clapped-out", "wonky", "pie-eating", "window-licking"
+        ];
+
+        // Column C: The British Noun
+        const colC = [
+            "wazzock", "pillock", "bellend", "muppet", "numpty", 
+            "plonker", "tosser", "git", "knobhead", "wanker", 
+            "cockwomble", "twat", "nonce", "minger", "sod", 
+            "donut", "weapon", "melt", "chopper", "clown"
+        ];
+
+        // Total Combinations: 15 * 20 * 20 = 6,000 unique insults.
+
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
         function generateInsult() {
-            // Pick a random index
-            const randomIndex = Math.floor(Math.random() * britishWords.length);
-            const randomWord = britishWords[randomIndex];
+            const display = document.getElementById('insult-display');
             
-            // Construct the insult
-            const insult = `You absolute ${randomWord}!`;
-            
-            // Display it
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerText = insult;
-            
-            // Add a little shake animation effect
-            const box = document.getElementById('result-box');
-            box.style.animation = 'none';
-            box.offsetHeight; /* trigger reflow */
-            box.style.animation = 'shake 0.5s';
+            // Generate parts
+            const part1 = getRandom(colA);
+            const part2 = getRandom(colB);
+            const part3 = getRandom(colC);
+
+            // Construct HTML with animation classes
+            // We use spans to animate words sequentially
+            const html = `
+                <span class="word pop-in" style="animation-delay: 0ms">You</span>
+                <span class="word pop-in highlight" style="animation-delay: 100ms">${part1}</span>
+                <span class="word pop-in" style="animation-delay: 200ms">${part2}</span>
+                <span class="word pop-in highlight" style="animation-delay: 300ms">${part3}!</span>
+            `;
+
+            display.innerHTML = html;
         }
+
+        function copyToClipboard() {
+            const text = document.getElementById('insult-display').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Insult copied to clipboard, you lazy sod!");
+            });
+        }
+
+        function speakInsult() {
+            const text = document.getElementById('insult-display').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Try to find a British voice
+            const voices = window.speechSynthesis.getVoices();
+            const britishVoice = voices.find(voice => voice.lang.includes('en-GB'));
+            
+            if (britishVoice) {
+                utterance.voice = britishVoice;
+            }
+            
+            utterance.rate = 0.9; // Slightly slower for emphasis
+            utterance.pitch = 0.9; // Slightly deeper
+            
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Initialize voices (browser quirk)
+        window.speechSynthesis.onvoiceschanged = () => {
+            // This forces the browser to load the voice list
+        };
+
     </script>
-    
-    <style>
-        /* Adding the shake animation keyframes here to keep it contained */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-    </style>
 </body>
 </html>
